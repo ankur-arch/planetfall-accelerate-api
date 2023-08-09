@@ -8,8 +8,8 @@ node_compat = true
 # Note: Use secrets to store sensitive data.
 # Docs: https://developers.cloudflare.com/workers/platform/environment-variables
 
-[vars]
-DATABASE_URL = "$DATABASE_URL"
+#[vars]
+#DATABASE_URL = "$DATABASE_URL"
 
 # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
 # Docs: https://developers.cloudflare.com/workers/runtime-apis/kv

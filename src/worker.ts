@@ -15,20 +15,21 @@ export interface Env {
 	DATABASE_URL: string;
 }
 
-let client: PrismaClient;
+// keeping this to be any to avoid multiple instantiation
+let client: any;
 
 const prisma = (env: Env) => {
 	if (client) {
 		return client;
 	}
-
+	
 	client = new PrismaClient({
 		datasources: {
 			db: {
 				url: env.DATABASE_URL,
 			},
 		},
-	});
+	}).$extends(withAccelerate());
 
 	return client;
 };
@@ -37,14 +38,13 @@ export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		return new Response(
 			await prisma(env)
-				.$extends(withAccelerate())
 				.notes.findMany({
 					take: 20,
 					cacheStrategy: {
-						ttl: 3600,
+						ttl: 64_00,
 					},
 				})
-				.then((data) => JSON.stringify(data))
+				.then((data: Object) => JSON.stringify(data))
 		);
 	},
 };
